@@ -1,0 +1,57 @@
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% if request.session.popup_shown %}
+<div class="modal fade show" id="myPopup" tabindex="-1" role="dialog" 
+aria-labelledby="popupTitle" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+
+      <div class="modal-content" style="background-color: chocolate; color: white;">
+        <button type="button" class="btn-close align-self-end m-1" data-bs-dismiss="modal" aria-label="Close" onclick="intial_popup()"></button>
+        <div class="modal-header text-center" style="height: 50px;">
+          <img src="{% static '/images/logo.jpg' %}" class="img-fluid mx-auto d-block" alt="Modal Image" style="height: 60px;">
+        </div>
+        <div class="modal-body" style="height: 300px; overflow-y: auto;">
+         <span>Welcome to Emporium Mall guys, We are very happy to see you here "Emporium Mall", you can earn impressive amount of income in following ways:</span> <br><br>
+        <span>1- <strong style="color: red;">Free 100Rs</strong> only for you and if you reffer a person you will get 3RS for each person</span><br><br>
+        <span>2- There is a very high Income in Emporium Mall</span> <br><br>
+        <span>3- Invite your friend & family to get more rewards</span><br><br>
+        <span>4- When you are at Level 1. Invest in Emporium Mall for the first time to get free award and 15% rebate. </span><br><br>
+        <span>5- level 1 will get 6%, level 2 will get 3% and level 3 will get 1%, .</span><br><br>
+        <span>Thank you for your Love and trust in Emporium Mall. We will serve our customers with heart, and bring you a better experience and satisfactory returns.</span>
+        </div>
+        <div class="modal-footer">
+          {% if Whatsapp_link %}
+          <button type="button" class="btn btn-success " onclick="navigateToGroup()">Join Our Group</button>
+          <button type="button" class="btn btn-success" onclick="navigateToWhatsApp()">Contact Us Now</button>
+          {% else %}
+          <button type="button" disabled class="btn btn-success">Join Our Group</button>
+          <button type="button" class="btn btn-success" disabled>Contact Us Now</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+      $('#myPopup').modal('show');
+    });
+    function intial_popup() {
+        $.ajax({
+            url: '/popup/intial/',
+            type: 'GET',
+
+            error: function (xhr, status, error) {
+                console.error('Error calling view function:', error);
+                // Handle the error if necessary
+            }
+        });
+    }
+    function navigateToWhatsApp() {
+    window.location.href = "https://api.whatsapp.com/send/?phone=92{{Whatsapp_link.phone_number}}";
+  }
+  function navigateToGroup() {
+    window.location.href = "{{Whatsapp_link.join_link}}";
+  }
+</script>
+{% endif %}

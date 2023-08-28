@@ -1,0 +1,537 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} View Plans List{% endblock %}
+
+{% block content %}
+<div class="nav-left-sidebar sidebar-dark d-none d-lg-block">
+    <div class="menu-list mb-5" style="max-height: 150vh;overflow-y: auto; min-width: 350px;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+
+                    <li class="nav-divider">
+                        {% if Company_profile %}
+                        <img src="/media/{{Company_profile.company_logo}}" class="mb-3 mt-4 ml-4"
+                        style="width: 150px;height:150px;border-radius: 50%;" />
+                    {% else %}
+                        <img src="{% static 'deault_profile_image.png'%}" class="mb-3 mt-4 ml-4 rounded-circle"
+                            style="width: auto;height:15vh;" />
+                    {% endif %}
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/">
+                            <i class="fa fa-fw fa-user-circle"></i>
+                            <span class="ml-2">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/all_users/">
+                            <i class="fa-regular fa-users"></i>
+                            <span class="ml-3">View All User</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-1" aria-controls="submenu-2">
+                            <i class="fa-regular fa-hand-holding-dollar"></i>
+                            <span class="ml-3">Manage Plans</span>
+                        </a>
+                        <div id="submenu-1" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="/admin_dashboard/all_plans/">View all plans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_plan/">Add new plans</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-2" aria-controls="submenu-2">
+                            <i class="fa-solid fa-landmark"></i>
+                            <span class="ml-3">Manage Bank Accounts</span>
+                        </a>
+                        <div id="submenu-2" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_account/">View all account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_account/">Add new account</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/depost/">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span class="ml-3">View Deposit Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/withdraw/">
+                            <i class="fa-solid fa-wallet"></i>
+                            <span class="ml-3">View Withdraw Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/socail_contact/">
+                            <i class="fa-regular fa-phone-volume"></i>
+                            <span class="ml-3">Manage Contact Information</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/profile/">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Auth/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<nav class="navbar navbar-dark bg-dark d-block d-sm-block d-lg-none d-xl-none mt-1">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/" aria-current="page">
+                        <i class="fa fa-fw fa-user-circle"></i>
+                        <span class="ml-2">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/all_users/">
+                        <i class="fa-regular fa-users"></i>
+                        <span class="ml-2">View All User</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-regular fa-hand-holding-dollar"></i>
+                        <span class="ml-3">Manage Plans</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_plans/">View all plans</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_plan/">Add new plans</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-landmark"></i>
+                        <span class="ml-3">Bank Accounts</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_account/">View all account</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_account/">Add new account</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/depost/">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="ml-3">Deposit Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/withdraw/">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span class="ml-3">Withdraw Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/socail_contact/">
+                        <i class="fa-regular fa-phone-volume"></i>
+                        <span class="ml-3">Manage Contact Information</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/profile/">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                </li>
+
+                <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                </li>
+
+                <li class="nav-item ">
+                        <a class="nav-link" href="/Auth/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                        <span> >> Plan List</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            <div class="row mt-3">
+                <!-- recent Requests  -->
+                <!-- ============================================================== -->
+                <div class="col-12 container bg-white">
+                    <h3 class="card-header text-center mb-1 mt-3">View All Plans</h3>
+                    <div class="table-responsive">
+                        <table id="deposit" class="table table-middle" style="width: 100%;">
+                            <thead>
+                                <tr align="center">
+                                    <th>#</th>
+                                    <th>image</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Daily income</th>
+                                    <th>Plan duration</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Active/deactivate</th>
+                                    <th>Update details</th>
+                                    <th>view details</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="table-group-divider">
+                                {% for i in all_plans %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td> 
+                                        {% if i.image %}
+                                            <img data-bs-toggle="modal"
+                                            data-bs-target="#viewimg{{i.id}}" src="/media/{{i.image}}" 
+                                            alt="Plan Image" style="width: 100px;cursor:pointer">
+                                        {% else %}
+                                            <img data-bs-toggle="modal"
+                                            data-bs-target="#viewimg{{i.id}}" src="{% static '/images/cover.jpeg' %}" 
+                                            alt="Plan Image" style="width: 100px;cursor:pointer">
+                                       {% endif %} 
+                                    <td>{{i.name}}</td>
+                                    <td> Rs {{i.price}}/-</td>
+                                    <td>Rs {{i.daily_income}}/-</td>
+                                    <td>{{i.plan_duration}} days</td>
+                                    <td>{{i.plan_category}}</td>
+
+
+                                    <td>
+                                        {% if i.is_launch %}
+                                        <span style="color:green"><i class="fa-solid fa-circle-check fa-2x"></i></span>
+                                        {% else %}
+                                        <span style="color:red" style="font-size:14px"><i class="fa-solid fa-circle-xmark fa-2x"></i></span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if i.is_launch %}
+                                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivate{{i.id}}">
+                                            Deactivate Launch Plan
+                                        </button>
+                                        {% else %}
+                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#activate{{i.id}}">
+                                          Lanuch Plan
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updatedetails{{i.id}}">
+                                            Update Details
+                                        </button>
+
+                                    </td>
+                                    <td><a data-bs-toggle="modal"
+                                        data-bs-target="#viewdetail{{i.id}}"
+                                        style="height:38px;width: 55px;margin-right: 10px; ">
+                                     <img alt="" src='{% static  "images/view-details.png" %}' style="width:30px;">
+                                 </a>
+                             </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+            {% for i in all_plans %}
+            <!-- plan update Model -->
+            <div class="modal fade" id="updatedetails{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                             Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, you want to update this plan details
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/update_plan/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="reject">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input value="update-btn" name="action" hidden />
+                                        <input value="{{i.id}}" name="id" hidden />
+                                        <input type="submit" class="btn btn-outline-success text-center" 
+                                        value="Update Plan detail">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- deactivate user Model -->
+            <div class="modal fade" id="deactivate{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Plan unlanuch confirmation</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, you want to Unlanunh this plan
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/plan_deactivate_activate/{{i.id}}/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="deactivate">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-danger text-center" 
+                                        value="Deactivate Lanuch Plan">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- plan lanuch Model -->
+            <div class="modal fade" id="activate{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                 Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, you want to lanunh this plan
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/plan_deactivate_activate/{{i.id}}/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="lanuch">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center" 
+                                        value="Lanuch Plan">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- plan Detail Model -->
+            <div class="modal fade" id="viewdetail{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                 Plan Details
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table width:100% align-middle">
+                                <tbody>
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Plan Name</h6>
+                                    </th>
+                                    <td>{{i.name}}</td>
+                                </tr>
+
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Plan Price</h6>
+                                    </th>
+                                    <td>Rs {{i.price}}/-</td>
+                                </tr>
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Plan Category</h6>
+                                    </th>
+                                    <td>{{i.plan_category}}</td>
+                                </tr>
+                                <td></td>
+
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Total income</h6>
+                                    </th>
+                                    <td>Rs {{i.total_income}}/-</td>
+                                </tr>
+
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Hourly income</h6>
+                                    </th>
+                                    <td>Rs {{i.hourly_income}}/-</td>
+                                </tr>
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Daily income</h6>
+                                    </th>
+                                    <td>Rs {{i.daily_income}}/-</td>
+                                </tr>
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Plan duration</h6>
+                                    </th>
+                                    <td>{{i.plan_duration}} days</td>
+                                </tr>
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Buy Limit</h6>
+                                    </th>
+                                    <td>{{i.quantity_limit}}</td>
+                                </tr>
+                                <tr align="center">
+                                    <th class="col-6"><h6 style="color:green">Status</h6>
+                                    </th>
+                                    <td>
+                                        {% if i.is_launch %}
+                                        <span style="color:green"><i class="fa-solid fa-circle-check"></i></span>
+                                        {% else %}
+                                        <span style="color:red" style="font-size:14px"><i class="fa-solid fa-circle-xmark"></i></span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                            <br/>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

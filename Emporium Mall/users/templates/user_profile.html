@@ -1,0 +1,172 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Profile{% endblock %}
+
+{% block content %}
+
+<head>
+    <style>
+            * {
+        color: #fff;
+    }
+    body {
+        background: linear-gradient(90deg, green, lightgreen);
+    }
+        .input-style {
+            border: none;
+            border-bottom: 2px solid white;
+            background-color: transparent;
+        }
+        .text-color{
+            color: #fff;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static './css/profile-setting.css' %}">
+</head>
+
+<body>
+    <div class="d-flex justify-content-center text-info px-2">
+        <div class="col-lg-8 col-md-12 col-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-lg-4 col-12">
+                        <div class="c3ard-block text-center text-white">
+                            <div class="mb-3">
+                                <img src="{% static '/images/user_default_image.png' %}"
+                                    class="img-radius rounded-circle img-fluid" alt="User-Profile-Image"
+                                    style="width: 150px;">
+                            </div>
+                            <!-- <h5 class="f-w-600">+92{{request.user.phone_number}}</h5>
+                            <h6 class="f-w-600">{{request.user.username}}</h6> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-12">
+                        <div class="card-block">
+                            <h3 class=" f-w-600 text-center" style="color: #fff;">Information</h3>
+                            <hr>
+                            <form method="POST" action="/user_profile/" style="background-color: chocolate;">
+                                {% csrf_token %}
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+
+                                <div class="row justify-content-between">
+                                    <div class="col-lg-6 col-12 p-1 m-0">
+                                        <p class="f-w-600 text-color">Email</p>
+                                        <input class="col-12 p-2 mt-1 input-style" type="email" name="email"
+                                             value="{{request.user.email}}" required
+                                            disabled>
+                                    </div>
+                                    <div class="col-lg-6 col-12 p-1 m-0">
+                                        <p class="f-w-600 text-color">username</p>
+                                        <input class="col-12 p-2 mt-1 input-style" type="text" name="username" id=""
+                                            value="{{request.user.username}}" 
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-4 mb-0">
+                                    <button type="submit" class="btn" style="background: transparent; color: skyblue; border: 2px solid skyblue;
+                                    ">Update Profile</button>
+                                </div>
+                            </form>
+                            <h3 class="f-w-600 text-center mt-3" style="color: #fff;">Change Password</h3>
+                            <hr>
+                            <form method="POST" action="/user_profile/" id="changePasswordForm" style="background-color: chocolate;">
+                                {% csrf_token %}
+                                <div class="row justify-content-between">
+                                    <div class="col-lg-6 col-12 p-1 m-0">
+                                        <p class="f-w-600 text-color">Current Password</p>
+                                        <input class="col-12  p-2 mt-1 input-style" type="password"
+                                            required name="current_password">
+                                    </div>
+                                    <div class="col-lg-6 col-12 p-1 m-0">
+                                        <p class="f-w-600 text-color">New Password</p>
+                                        <input class="col-12  p-2 mt-1 input-style" type="password"
+                                             required name="new_password" id="passwordField"
+                                            minlength="8">
+                                        <span id="error_password" style="display: none; color: red;font-size: 13px;"
+                                            class="ml-4"></span>
+                                    </div>
+                                    <div class="col-lg-6 col-12 p-1 m-0">
+                                        <p class="f-w-600 text-color">Confirm Password</p>
+                                        <input class="col-12  p-2 mt-1 input-style" type="password"
+                                            name="confirm_password" required
+                                            id="Confirm_passwordField" minlength="8">
+                                        <span id="error_Confirm_password"
+                                            style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button type="submit" class="btn" style="background: transparent; color: skyblue; border: 2px solid skyblue;                                    ">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var error_password = document.getElementById('error_password');
+        var error_Confirm_password = document.getElementById('error_Confirm_password');
+
+        var passwordField = document.getElementById('passwordField');
+        var Confirm_passwordField = document.getElementById('Confirm_passwordField');
+
+        passwordField.onclick = function () {
+            error_password.style.display = 'none'
+        };
+        Confirm_passwordField.onclick = function () {
+            error_Confirm_password.style.display = 'none'
+        };
+
+        document.getElementById('changePasswordForm').addEventListener('submit', function (event) {
+            var minLength_password = parseInt(passwordField.getAttribute('minlength'));
+            var passwordValue = passwordField.value.trim();
+
+            var minLength_Confirm_password = parseInt(Confirm_passwordField.getAttribute('minlength'));
+            var Confirm_passwordValue = Confirm_passwordField.value.trim();
+
+            if (passwordValue.length < minLength_password) {
+                event.preventDefault(); // Prevent form submission
+                error_password.style.display = 'block';
+                error_password.textContent = 'Password must be at least ' + minLength_password + ' characters long.';
+            }
+
+            if (Confirm_passwordValue.length < minLength_Confirm_password) {
+                event.preventDefault(); // Prevent form submission
+                error_Confirm_password.style.display = 'block';
+                error_Confirm_password.textContent = 'Password must be at least ' + minLength_Confirm_password + ' characters long.';
+            }
+            else if (Confirm_passwordValue != passwordValue) {
+                event.preventDefault();
+                error_password.style.display = 'block';
+                error_Confirm_password.style.display = 'block';
+                error_Confirm_password.textContent = 'Password and confirm Password must be same';
+            }
+
+
+            // if (phoneValue[0] === '0') {
+            //     event.preventDefault(); // Prevent form submission
+            //     error_phonelenght.style.display = 'block';
+            //     error_phonelenght.textContent = 'Phone number first number cannot be 0';
+            // }
+
+        });
+    </script>
+</body>
+{% endblock %}

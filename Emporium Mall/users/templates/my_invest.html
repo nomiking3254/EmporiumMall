@@ -1,0 +1,336 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} My Investment{% endblock %}
+
+{% block content %}
+
+<head>
+    <style>
+        body {
+            background: linear-gradient(90deg, green, lightgreen);
+        }
+        .invest_card_font {
+            font-size: 10px;
+            color: #fff;
+        }
+        @media(max-width: 320px) {
+
+            .invest_card_font,
+            .invest_days_font {
+                font-size: 10px;
+            }
+        }
+
+        .container {
+            /*background-image: url("../../static/images/line.png");*/
+            /* Replace with your background image */
+            background-color: chocolate;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+
+        }
+
+        .heading {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .sub-heading {
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                justify-content: start;
+            }
+
+            .left-section {
+                padding: 30px 1px;
+                /* text-align: center; */
+            }
+
+            .heading {
+                font-size: 16px;
+            }
+
+            .sub-heading {
+                font-size: 14px;
+            }
+        }
+        * {
+        color: #fff;
+    }
+    </style>
+</head>
+<!-- graf -->
+<div class="graf col-10 mb-5 mx-auto">
+    <div class="container">
+        <div class="left-section">
+            <h4 class="text-white">Total Income</h4>
+            <h4 class="text-white">RS: {{total_user_income |floatformat:"2"}}</h4>
+            <h4 class="sub-heading text-white mt-1">Plans</h4>
+            <h4 class="text-white">0{{User_plans_count}}</h4>
+
+        </div>
+    </div>
+    <div class="card  graf_content" id="" style="background-color: chocolate;">
+        <div class="tab-pane fade show active padi" id="tab1" role="tabpanel" aria-labelledby="home-tab-md">
+            <div class="row mt-3">
+                <div class="usd col-lg-4 col-6 mx-auto">
+                    <!-- <p class="m-0 p-0 text-sm-center">Projects (0{{User_plans_count}})</p> -->
+                    <!-- <p class="m-0 p-0 text-sm-center">Active Plans</p> -->
+                </div>
+                <!-- <div class="usd col-lg-4 text-center d-lg-block d-none">
+                    <h4><span> <i class="fa fa-list" aria-hidden="true"></i> Investment</span> Plans</h4>
+                </div> -->
+                <div class="col-lg-4 col-6" style="text-align: end;">
+                    <!-- <p class="m-0 p-0 text-sm-center">Rs. {{total_user_income |floatformat:"2"}}</p> -->
+                    <!-- <p class="m-0 p-0 text-sm-center">Income Plans</p> -->
+                </div>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% for i in User_plans %}
+            <div class="card mt-3">
+                <div class="card-header p-2 d-flex justify-content-around ">
+
+                    <div class="col-3">
+                        {% if i.plan.image %}
+                            <img src="/media/{{i.plan.image}}" alt="Image" style="width: 80px; height: 80px; background-color: chocolate; padding: 10px; border-radius: 10px;" />
+                        {% else %}
+                            <img src="{% static 'images/logo.jpg' %}" alt="Image" style="width: 80px; height: 80px; background-color: chocolate; padding: 10px; border-radius: 10px;" />
+                        {% endif %}
+
+                    </div>
+                    <div class="col-8">
+                        <div>
+                            <h4 style="width: 100%;display: block; color: #fff; height: 30px; overflow: hidden;">
+                                <b>{{i.plan.name}}</b>
+                            </h4>
+                        </div>
+                        <div class="col-12 row mt-1">
+                            <div class="col-6 ">
+                                <span style=" font-size: 14px; font-weight: bold;" class="invest_card_font ">
+                                    Rs.{{i.plan.hourly_income}}
+                                </span>
+                                <p class="m-0 p-0 invest_card_font " style="font-size: 9px;">
+                                    <b>Hourly Income</b>
+
+                                </p>
+                            </div>
+                            <div class="col-6 ">
+                                <span style="font-size: 14px; font-weight: bold;" class="invest_card_font ">
+                                    Rs.{{i.plan.daily_income}}
+                                </span>
+                                <p class="m-0 p-0">
+                                    <b class="invest_card_font" style="font-size: 9px;">Day Income</b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer invest_sm d-flex" style="min-height: 10vh; background-color: chocolate;">
+                    <div class="col-6 text-center">
+                        <span style="font-size: 14px; font-weight: bold;" class="invest_card_font ">
+                            Rs.{{i.plan.total_income}}
+                        </span>
+                        <p class="m-0 p-0">
+                            <b class="invest_card_font" style="font-size: 14px;">Total Income</b>
+
+                        </p>
+                    </div>
+
+                    <div class="col-6 text-center ">
+                        <p class="m-0 invest_card_font" style="font-weight: bold;">
+                            {% for j in plans_days %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            {{j}}/{{i.plan.plan_duration}} Days
+                            {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p class="m-0 p-0">
+                            <b class="invest_card_font" style="font-size: 14px;">Working Periods</b>
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- <div id="invert" class="row col-12 container-fluid">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% for i in User_plans %}
+                    <div class="row col-12 m-0 col-md-6 mb-4" id="invest-card">
+                        {% if i.plan.image %}
+                        <div class="card-header"
+                            style="display: flex; justify-content: space-between;min-height: 20vh; background-image: url('/media/{{i.plan.image}}');">
+                        {% else %}
+                            <div class="card-header" style="display: flex; justify-content: space-between;min-height: 20vh;">
+                        {% endif %}
+                            <h3 style="width: 100%;">
+                                <p class="badge badge-warning invest_days_font" style="float: right;">
+                                    {% for j in plans_days %}
+                                    {% if forloop.parentloop.counter == forloop.counter %}
+                                    {{j}}/{{i.plan.plan_duration}} Days
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                                <br>
+                                <b style="font-size: 18px;margin-right: 5px;">{{i.plan.name}}</b>
+                                <span class="badge bg-success invest_days_font">{{i.status}}</span>
+                            </h3>
+                        </div>
+                        <span class="invest_lg m-0 p-0">
+                        <div class="card-footer " style="min-height: 15vh;display: flex;" >
+                            <div>
+                                <p class="m-0 p-0">
+                                    <b>Rs. {{i.plan.hourly_income}}</b>
+                                </p>
+                                <p class="m-0 p-0">Hourly Income</p>
+                            </div>
+                            <div>
+                                <p class="m-0 p-0">
+                                    <b>Rs.{{i.plan.daily_income}}</b>
+                                </p>
+                                <p class="m-0 p-0">Daily Income</p>
+                            </div>
+                            <div class="">
+                                <p class="m-0 p-1 btn btn-warning text-white"></p>
+                                {% for j in income_per_plan %}
+                                {% if forloop.parentloop.counter == forloop.counter %}
+                                Rs. {{j |floatformat:"1"}}
+                                {% endif %}
+                                {% endfor %}
+                                </p>
+                                <p class="m-0 p-0">cumulative Income</p>
+                            </div>
+                        </div>
+                    </span>
+
+                        <div class="card-footer invest_sm" style="min-height: 10vh;" >
+                            <div class="col-12 text-center m-0 p-0" >
+                                <p class="m-0 p-0">
+                                    <b class="invest_card_font">Hourly Income</b>
+                                    <span class="invest_card_font" style="margin-left: 10px ;">
+                                        Rs.{{i.plan.hourly_income}}
+                                    </span>
+                            </p>
+                            </div>
+                            <hr class="m-0">
+                            <div class="col-12 text-center">
+                                <p class="m-0 p-0">
+                                    <b class="invest_card_font">Daily Income</b>
+                                    <span style="margin-left: 10px ;" class="invest_card_font">
+                                        Rs.{{i.plan.daily_income}}
+                                    </span>
+                                </p>
+                            </div>
+                            <hr class="m-0">
+                            <div class="col-12 text-center">
+                                <b class="invest_card_font">cumulative Income</b>
+                                <p class="m-0 p-1 btn btn-warning text-white" style="margin-left: 10px ;">
+                                    {% for j in income_per_plan %}
+                                    {% if forloop.parentloop.counter == forloop.counter %}
+                                    Rs.{{j |floatformat:"2"}}
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div> -->
+                <!-- <div> -->
+                    <!-- <div class="row mt-5 mb-5">
+                        <div class="col-xl-12">
+                            <div class="basic-pagination text-center pt-30 pb-30">
+                                <nav>
+                                    <ul>
+                                        <span class="step-links show-more-btn pg-btn" id="pagination-invest">
+                                            {% if User_plans.has_previous %}
+                                            <a href="?page={{ User_plans.previous_page_number }}">
+                                                <button class="btn btn-outline-warning pg-btn">&laquo; previous</button>
+                                            </a>
+                                            {% endif %}
+                                            <span class="current text-white">
+                                                Page {{ User_plans.number }} of
+                                                {{ User_plans.paginator.num_pages }}.
+                                            </span>
+
+                                            {% if User_plans.has_next %}
+                                            <a href="?page={{ User_plans.next_page_number }}">
+                                                <button class="btn btn-outline-warning pg-btn">next &raquo;</button>
+                                            </a>
+                                            {% endif %}
+                                        </span>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Handle pagination link clicks
+
+        $(document).on('click', '#pagination-invest a', function (event) {
+            event.preventDefault();
+            var pageUrl = $(this).attr('href');
+
+            // Make AJAX request to fetch the new page data
+            $.ajax({
+                url: pageUrl,
+                type: 'GET',
+                dataType: 'html',
+                success: function (data) {
+                    var result = $('<div />').append(data);
+                    var newContent = result.find('#invert').html();
+                    var newPagination = result.find('#pagination-invest').html();
+
+                    // Update the content and pagination
+                    $('#invert').html(newContent);
+                    $('#pagination-invest').html(newPagination);
+                },
+                error: function () {
+                    alert('Error occurred while fetching page.');
+                }
+            });
+        });
+    });
+</script>
+<!-- end graf -->
+{% endblock %}

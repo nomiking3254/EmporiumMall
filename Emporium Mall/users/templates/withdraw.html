@@ -1,0 +1,279 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Withdraw{% endblock %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static './css/recharge.css' %}">
+</head>
+<style>
+    .card {
+        background-color: chocolate;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .card-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .label {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+
+    .input-container {
+        display: flex;
+    }
+
+    .button {
+        background-color: transparent;
+        border: 2px solid skyblue;
+        color: skyblue;
+        padding: 5px 10px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .button-minus {
+        border-radius: 8px 0 0 8px;
+        background: transparent;
+    }
+
+    .button-plus {
+        border-radius: 0 8px 8px 0;
+        background: transparent;
+    }
+
+    .input-field {
+        flex-grow: 1;
+        border: none;
+        border-radius: 0;
+        padding: 5px;
+        font-size: 16px;
+        background: chocolate;
+    }
+
+    @media screen and (min-width: 768px) {
+        .container {
+            max-width: 750px;
+        }
+    }
+
+    @media screen and (min-width: 992px) {
+        .container {
+            max-width: 970px;
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
+        .container {
+            max-width: 1170px;
+        }
+    }
+
+    .recharge-section {
+        margin-bottom: 20px;
+    }
+
+    .recharge-input-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .recharge-label {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+
+    .select-container {
+        position: relative;
+    }
+
+    .recharge-input {
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        background-image: url('../../static/images/right-arrow_271228.png');
+        /* Replace with your arrow icon image */
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    @media screen and (max-width: 576px) {
+        .recharge-label {
+            font-size: 16px;
+        }
+    }
+
+    * {
+        color: #fff;
+    }
+
+    body {
+        background: linear-gradient(90deg, green, lightgreen);
+    }
+</style>
+
+<body class="main-layout">
+    <div class="container">
+        <!-- <div class="header mt-3">
+            <div class="left-arrow col-4"><a style="color: blueviolet;" href="/"><i class="fa-solid fa-arrow-left"></i></a>
+            </div>
+            <div class="recharge-label col-8">Withdraw Amount:</div>
+        </div> -->
+        <form method="POST" action="/withdraw/" id="withdrawForm">
+            {% csrf_token %}
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% if user_bank_account %}
+            <input type='hidden' value='yes' hidden name='bank_add' />
+            {% else %}
+            <input type='hidden' value='no' hidden name='bank_add' />
+            {% endif %}
+            <div class="container">
+                <div class="card">
+                    <div class="card-content">
+                        <label for="amount" class="label">Withdraw Amount:</label>
+                        <div class="input-container">
+                            <!-- <button class="button button-minus">-</button> -->
+                            <input type="number" class="input-field text-center no-arrow" id="amountField" name="amount"
+                                required style="border-bottom: solid 3px #fff;" />
+                            <!-- <button class="button button-plus">+</button> -->
+                        </div>
+                        <span id="error_message" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                        <p id="errorMessage" style="color: red; display: none; font-size: 10px;">You can't withdraw
+                            between 06:00 Pm - 10:00 AM.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div>
+                    <input type="number" value="{{last_withdraw}}" id="last_withdraw_time" hidden />
+                    <div class="recharge-section">
+                        <div class="recharge-input-container"
+                            style=" background-color: chocolate; padding: 5px 10px; border-radius: 15px;">
+                            <label for="bank" class="recharge-label p-2">Bank Account:</label>
+                            <div class="select-container">
+                                <select name="bank" id="bank" class="recharge-input">
+                                    {% if user_bank_account %}
+                                    <option value="{{user_bank_account.id}}">{{user_bank_account.bank_id}} -
+                                        {{user_bank_account.account_title}}</option>
+                                    {% else %}
+                                    <option value="" style="font-size: small;">Add your bank account details.</option>
+                                    {% endif %}
+                                </select>
+                                <i class="icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- </span> -->
+                    <input class="register-button mt-2 mb-3" type="submit" value="Withdraw" type="submit" id="submitBtn"
+                        style="color: skyblue; background: transparent; border: 2px solid skyblue;" />
+                </div>
+
+                <div class="mt-4" style="background-color:chocolate; padding: 5px 10px; border-radius: 15px;">
+                    <h3 style="padding: 8px; font-weight: bold; color: #fff;">Specification
+                    </h3>
+                    <span class="ps-2 pt-2">
+                        1. Minimum withdrawal amount Rs.550. <br> <br>
+                    </span>
+                    <span class="ps-2">
+                        2. Withdrawal fee 15%.<br> <br>
+                    </span>
+                    <span class="ps-2">
+                        3. Withdraw from 10:00 AM - 6:00 PM. <br> <br>
+                    </span>
+                    <span class="ps-2">
+                        4. Withdraw once a day. <br>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        var error_message = document.getElementById('error_message');
+        var amountField = document.getElementById('amountField');
+        var submitButton = document.getElementById("submitBtn");
+        var last_withdraw_time = document.getElementById('last_withdraw_time');
+
+        amountField.onclick = function () {
+            error_message.style.display = 'none'
+        };
+
+        document.getElementById('withdrawForm').addEventListener('submit', function (event) {
+            var amountValue = amountField.value.trim();
+            var lastwithdrawValue = last_withdraw_time.value.trim();
+
+            if (amountValue < 550) {
+                event.preventDefault(); // Prevent form submission
+                error_message.style.display = 'block';
+                error_message.textContent = "Minimium withdraw amount is 550 Rs";
+            }
+
+            else if (lastwithdrawValue < 24 && lastwithdrawValue != "") {
+                event.preventDefault(); // Prevent form submission
+                error_message.style.display = 'block';
+                error_message.textContent = "You can apply only one withdraw request in one day";
+            }
+            else {
+                submitButton.disabled = true;
+                submitButton.value = "Submitting...";
+            }
+        });
+    </script>
+    <script>
+        // Get the current date and time
+        var now = new Date();
+
+        // Get the current hour (0-23)
+        var currentHour = now.getHours();
+
+        // Check if the current time is between 11 PM and 9 AM
+        if (currentHour >= 18 || currentHour < 10) {
+            // Disable the input field
+            document.getElementById("amountField").disabled = true;
+            document.getElementById("errorMessage").style.display = "block";
+
+        }
+        document.querySelector("form").addEventListener("submit", validateForm);
+
+    </script>
+</body>
+{% endblock %}

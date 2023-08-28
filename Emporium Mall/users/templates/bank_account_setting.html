@@ -1,0 +1,170 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} My Bills{% endblock %}
+
+{% block content %}
+
+<head>
+    <style>
+            * {
+        color: #fff;
+    }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, green, lightgreen); 
+        }
+
+        .container-bank {
+            /* max-width: 1000px; */
+            padding: 0px 20px;
+        }
+
+        .left-arrow {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .heading {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            display: block;
+            font-weight: bold;
+            color: #fff;
+
+        }
+
+        .form-group input,
+        select {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            box-sizing: border-box;
+            font-size: 16px;
+            border-bottom: 2px solid white;
+            border-top: 0px;
+            border-left: 0px;
+            border-right: 0px;
+        }
+
+        .form-group input[type="text"]:disabled {
+            background-color: #f4f4f4;
+        }
+
+        .register-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background-color: transparent;
+             color: #fff;
+            border: none;
+            cursor: pointer;
+            border: 2px solid skyblue;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="main-layout">
+    <div class="container-bank mt-3" style="background-color: chocolate; border-radius: 10px;">
+        <div class="row mb-2">
+            <div class="left-arrow col-3"><a style="color: #fff;" href="/"><i class="fa-solid fa-arrow-left"></i></a>
+            </div>
+            <h3 class="heading col-9 mt-2">Edit Account Details</h3>
+        </div>
+        <form method="POST" action="/bank_account/" id="bankForm" >
+            {% csrf_token %}
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            <div class="form-group">
+                <label for="holder-name">Account Holder Name:</label>
+                <input type="text" id="holder-name" name="account_name" value="{{user_bank_account.account_title}}"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="account-number">Account Number:</label>
+                {% if user_bank_account.bank_id.bank_name == 'JazaCash' or user_bank_account.bank_id.bank_name == 'Easypasia' %}
+                <input type="number" id="account-number no-arrow" name="account_number" maxlength="20" minlength="11"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                     required id="phone_input_sm"
+                    value="0{{user_bank_account.account_number}}" required
+                   >
+                {% else %}
+                <input type="number" id="account-number no-arrow" name="account_number" maxlength="20" minlength="11"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                     required id="phone_input_sm"
+                    value="{{user_bank_account.account_number}}" required
+                   >
+                {% endif %}
+                <span id="error_phonelenght_sm" style="display: none; color: red;font-size: 13px;"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="bank">Select Bank:</label>
+                <select name="bank" id="bank" required>
+                    <option value="">Select Your Bank</option>
+                    {% for i in bank_names %}
+                    {% if user_bank_account.bank_id.id == i.id %}
+                    <option value="{{i.id}}" selected>{{i.bank_name}}</option>
+                    {% else %}
+                    <option value="{{i.id}}">{{i.bank_name}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            {% if user_bank_account %}
+            <input type="number" name="id" value="{{user_bank_account.id}}" hidden>
+            <button class="register-button text_align_center mt-4" type="submit">Update Account Details</button>
+            {% else %}
+            <button class="register-button text_align_center mt-4" type="submit">Add Bank Account</button>
+            {% endif %}
+        </form>
+    </div>
+    <script>
+        var error_phonelenght_sm = document.getElementById('error_phonelenght_sm');
+        var phone_input_sm = document.getElementById('phone_input_sm');
+        phone_input_sm.onclick = function () {
+            error_phonelenght_sm.style.display = 'none'
+        };
+
+        document.getElementById('bankForm').addEventListener('submit', function (event) {
+            var minLength_phone_sm = parseInt(phone_input_sm.getAttribute('minlength'));
+            var phoneValue_sm = phone_input_sm.value.trim();
+
+
+            if (phoneValue_sm.length < minLength_phone_sm) {
+                event.preventDefault(); // Prevent form submission
+                error_phonelenght_sm.style.display = 'block';
+                error_phonelenght_sm.textContent = 'Please enter valid phone number. \n Account number must be atleast ' + minLength_phone_sm + ' digit long.';
+            }
+        });
+
+    </script>
+</body>
+{% endblock %}

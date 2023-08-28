@@ -1,0 +1,757 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Dashboard{% endblock %}
+
+{% block content %}
+<!-- ============================================================== -->
+<!-- left sidebar -->
+<!-- ============================================================== -->
+
+<div class="nav-left-sidebar sidebar-dark d-none d-lg-block">
+    <div class="menu-list mb-5" style="max-height: 150vh;overflow-y: auto; min-width: 350px;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+
+                    <li class="nav-divider">
+                        {% if Company_profile %}
+                        <img src="/media/{{Company_profile.company_logo}}" class="mb-3 mt-4 ml-4"
+                        style="width: 150px;height:150px;border-radius: 50%;" />
+                    {% else %}
+                        <img src="{% static 'deault_profile_image.png'%}" class="mb-3 mt-4 ml-4 rounded-circle"
+                            style="width: auto;height:15vh;" />
+                    {% endif %}
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="/admin_dashboard/">
+                            <i class="fa fa-fw fa-user-circle"></i>
+                            <span class="ml-2">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/all_users/">
+                            <i class="fa-regular fa-users"></i>
+                            <span class="ml-3">View All User</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-1" aria-controls="submenu-2">
+                            <i class="fa-regular fa-hand-holding-dollar"></i>
+                            <span class="ml-3">Manage Plans</span>
+                        </a>
+                        <div id="submenu-1" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_plans/">View all plans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_plan/">Add new plans</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-2" aria-controls="submenu-2">
+                            <i class="fa-solid fa-landmark"></i>
+                            <span class="ml-3">Manage Bank Accounts</span>
+                        </a>
+                        <div id="submenu-2" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_account/">View all account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_account/">Add new account</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/depost/">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span class="ml-3">View Deposit Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/withdraw/">
+                            <i class="fa-solid fa-wallet"></i>
+                            <span class="ml-3">View Withdraw Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/socail_contact/">
+                            <i class="fa-regular fa-phone-volume"></i>
+                            <span class="ml-3">Manage Contact Information</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/profile/">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Auth/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<nav class="navbar navbar-dark bg-dark d-block d-sm-block d-lg-none d-xl-none mt-1">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin_dashboard/" aria-current="page">
+                        <i class="fa fa-fw fa-user-circle"></i>
+                        <span class="ml-2">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/all_users/">
+                        <i class="fa-regular fa-users"></i>
+                        <span class="ml-2">View All User</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-regular fa-hand-holding-dollar"></i>
+                        <span class="ml-3">Manage Plans</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_plans/">View all plans</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_plan/">Add new plans</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-landmark"></i>
+                        <span class="ml-3">Bank Accounts</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_account/">View all account</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_account/">Add new account</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/depost/">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="ml-3">Deposit Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/withdraw/">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span class="ml-3">Withdraw Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/socail_contact/">
+                        <i class="fa-regular fa-phone-volume"></i>
+                        <span class="ml-3">Manage Contact Information</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/profile/">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                </li>
+
+                <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                </li>
+
+                <li class="nav-item ">
+                        <a class="nav-link" href="/Auth/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a></li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ecommerce-widget">
+                <!-- ============================================================== -->
+                <!-- Cards  -->
+                <!-- ============================================================== -->
+                <div class="row mt-2">
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center pl-4 pr-4">Total Users</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <i class="fa-regular fa-users" style="color:green;float: left;"></i>
+                                    </h1>
+                                    <h2 class="text-right" style="margin-top: -2px;">{{total_user}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center">Total Plans</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <i class="fa-regular fa-cubes"
+                                            style="color:rgb(51, 72, 210);float: left;"></i>
+                                    </h1>
+                                    <h2 class="text-right ml-3" style="margin-top: -2px;">{{total_plans}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center mr-4">Total Buy Plan </h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">
+                                        <i class="fa-regular fa-hand-holding-dollar"
+                                            style="color:rgb(15, 141, 143);float: left;"></i>
+                                    </h1>
+                                    <h2 class="text-right mr-1" style="margin-top: -2px;">
+                                        {{total_buy_plans}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center">Pedding Deposit Requests</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1 ml-5">
+                                        <i class="fa-solid fa-landmark"
+                                            style="color:rgb(104, 20, 128);float: left;">
+                                        </i>
+                                    </h1>
+                                    <h2 class="text-right" style="margin-top: -2px;margin-right: 20%;">
+                                        {{total_deposit_request}}
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center">Pedding Withdraw Requests</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1 ml-5">
+                                        <i class="fa-solid fa-wallet"
+                                            style="color:saddlebrown;float: left;"></i>
+                                    </h1>
+                                    <h2 class="text-right" style="margin-top: -2px;margin-right: 20%;">
+                                        {{total_withdraw_request}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center">Approved Withdraw Amount</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1 ml-5">
+                                        <i class="fa-solid fa-sack-dollar"
+                                            style="color:rgb(69, 19, 139);float: left;"></i>
+                                    </h1>
+                                    <h2 class="text-right" style="margin-top: -2px;margin-right: 24%;">
+                                       Rs {{total_Withdraw}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h5 class="text-muted text-center">Approved Deposit Amount</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1 ml-5">
+                                        <i class="fa-solid fa-money-bill-1-wave"
+                                            style="color:rgb(21, 139, 19);float: left;"></i>
+                                    </h1>
+                                    <h2 class="text-right" style="margin-top: -2px;margin-right: 24%;">
+                                        Rs {{total_deposit}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            <div class="row mt-3">
+                <!-- recent Requests  -->
+                <!-- ============================================================== -->
+                <div class="col-12 container bg-white">
+                    <h3 class="card-header text-center mb-1 mt-3">Pedding Deposit Requests</h3>
+                    <div class="table-responsive">
+                        <table id="deposit" class="table table-middle" style="width: 100%;">
+                            <thead>
+                                <tr align="center">
+                                    <th>#</th>
+                                    <th>images</th>
+                                    <th>user</th>
+                                    <th>Deposit Amount</th>
+                                    <th>Request time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="table-group-divider">
+                                {% for i in deposit_request %}
+                                <tr align="center">
+                                    <td>{{forloop.counter}}</td>
+                                    <td> {% for image in i.images.all %}
+                                        <img data-bs-toggle="modal"
+                                        data-bs-target="#viewimg{{i.id}}" src="{{ image.image.url }}" 
+                                        alt="Deposit Image" style="width: 50px;cursor:pointer">
+
+                                    {% endfor %}                                    
+                                    </td>
+                                    <td>{{i.user}}</td>
+                                    <td>Rs {{i.amount}} /-</td>
+                                    <td>{{i.deposit_request_at}}</td>
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <b class="badge text-bg-warning" style="font-size:14px">{{i.status}}..</b>
+                                        {% elif i.status == 'Deposit Failed'%}
+                                        <span class="badge text-bg-danger" style="font-size:14px">Rejected</span>
+                                        {% else %}
+                                        <span class="badge text-bg-success" style="font-size:14px">Approved</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <button class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#Confirm{{i.id}}">Conform
+                                        </button>
+                                        <button class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#Cancel{{i.id}}">Rejected</button>
+                                        {% elif i.status == 'Deposit Failed' %}
+                                        <h3 class="badge text-bg-warning" style="font-size: 16px;margin-bottom: -1px;">
+                                            Review</h3>
+                                        {% else %}
+                                        <h2 class="badge text-bg-success" style="font-size: 16px;margin-bottom: -1px;">
+                                            Confirm</h2>
+                                        {% endif %}
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <!-- recent Requests  -->
+                <!-- ============================================================== -->
+                <div class="col-12 container bg-white">
+                    <h3 class="card-header text-center mb-1 mt-3">Pedding Withdraw Requests</h3>
+                    <div class="table-responsive">
+                        <table id="withdraw" class="table table-middle" style="width: 100%;">
+                            <thead>
+                                <tr align="center">
+                                    <th>#</th>
+                                    <th>user</th>
+                                    <th>Withdraw amount</th>
+                                    <th>Amount received</th>
+                                    <th>Request time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>Account Details</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="table-group-divider">
+                                {% for i in Withdraw_request %}
+                                <tr align="center">
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{i.user}}</td>
+                                    <td>Rs {{i.withdraw_amount |floatformat:"1"}} /-</td>
+                                    <td>Rs {{i.amount_received |floatformat:"2"}} /-</td>
+                                    <td>{{i.withdraw_request_at}}</td>
+
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <b class="badge text-bg-warning" style="font-size:14px">{{i.status}}..</b>
+                                        {% elif i.status == 'Withdraw Failed'%}
+                                        <span class="badge text-bg-danger" style="font-size:14px">Rejected</span>
+                                        {% else %}
+                                        <span class="badge text-bg-success" style="font-size:14px">Approved</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <button class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#Confirmwithdraw{{i.id}}">Conform
+                                        </button>
+                                        <button class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#Rejectwithdraw{{i.id}}">Rejected</button>
+                                        {% elif i.status == 'Withdraw Failed' %}
+                                        <h3 class="badge text-bg-warning" style="font-size: 16px;margin-bottom: -1px;">
+                                            Review</h3>
+                                        {% else %}
+                                        <h2 class="badge text-bg-success" style="font-size: 16px;margin-bottom: -1px;">
+                                            Confirm</h2>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <i class="fa-solid fa-eye" data-bs-toggle="modal"
+                                            data-bs-target="#accountDetail{{i.id}}"
+                                            style="color:rgb(110, 203, 23); cursor: pointer;"></i>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            {% for i in deposit_request %}
+            <!-- deposit reject Model -->
+            <div class="modal fade" id="Cancel{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                               Reject Confirmation</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to reject this deposit request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/deposit_Reject_approved/{{i.id}}/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="reject">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-danger text-center" 
+                                        value="Reject deposit Request">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- depost Confirm Model -->
+            <div class="modal fade" id="Confirm{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Deposit Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to confirm this deposit request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/deposit_Reject_approved/{{i.id}}/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="approved">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center" 
+                                        value="Approved deposit Request">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- viewimg Model -->
+            <div class="modal fade" id="viewimg{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Deposit Images
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <h4 class="text-center">
+                                    Proof image preview
+                                </h4>
+                                <table class="table width:100%">
+                                    <tbody>
+                                        {% for image in i.images.all %}
+                                        <tr align="center">
+                                                <td class="col-12" style="justify-content: space-around;">
+                                                <img src="{{ image.image.url }}" 
+                                                alt="Deposit Image" style="max-width: 350px;">
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+            {% for i in Withdraw_request %}
+            <!-- withdraw reject Model -->
+            <div class="modal fade" id="Rejectwithdraw{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Withdraw Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to reject this withdraw request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/withdraw_Reject_approved/{{i.id}}/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="reject">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-danger text-center" 
+                                        value="Reject withdraw Request">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- withdraw Confirm Model -->
+            <div class="modal fade" id="Confirmwithdraw{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                withdraw Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to confirm this withdraw request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/withdraw_Reject_approved/{{i.id}}/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="approved">
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center" 
+                                        value="Approved withdraw Request">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- view user account Model -->
+            <div class="modal fade" id="accountDetail{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                User Bank Account Detail
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table width:100%">
+                                    <tbody>
+
+                                        <tr>
+                                            <th class="col-6" style="color:green">
+                                                    Account Title
+                                            </th>
+                                            <td class="col-6" style="color:green">
+                                                    {{i.user_account.account_title}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6" style="color:green">
+                                                Account number
+                                            </th>
+                                            <td>               
+                                                 {% if i.user_account.bank_id.bank_name == 'JazaCash' or i.user_account.bank_id.bank_name == 'Easypasia' %}
+                                                   0{{i.user_account.account_number}}
+                                                {% else %}
+                                                   {{i.user_account.account_number}}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6" style="color:green">
+                                                Bank
+                                            </th>
+                                            <td>{{i.user_account.bank_id.bank_name}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

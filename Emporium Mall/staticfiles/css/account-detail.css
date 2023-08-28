@@ -1,0 +1,71 @@
+
+ 
+
+
+.package {
+    /* display: flex;
+    align-items: center; */
+    margin-bottom: 20px;
+}
+
+.package-image {
+    width: 100px;
+    /* margin-right: 20px; */
+}
+
+.package-text {
+    font-size: 20px;
+}
+
+.package-price {
+    font-size: 16px;
+}
+
+.step-heading {
+    font-size: 16px;
+    /* margin-bottom: 10px; */
+}
+
+.account-number {
+    /* display: flex;
+    align-items: center; */
+    margin-bottom: 10px;
+}
+
+.account-number-text {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.copy-button {
+    padding: 5px 10px;
+    font-size: 16px;
+    background-color: lightgray;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+.image-uploader {
+    margin-bottom: 20px;
+}
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.upload-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    background-image: linear-gradient(314deg, #023B1D 0%, #0fe240 78%);
+    color: white;
+    border: none;
+    cursor: pointer;
+}

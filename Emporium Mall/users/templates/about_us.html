@@ -1,0 +1,55 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} About Us{% endblock %}
+
+{% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static './css/about_us.css' %}">
+</head>
+<style>
+      * {
+        color: #fff;
+        background-color: chocolate;
+    }
+  .content {
+    box-shadow: 0px 1px 1px rgb(0, 0, 0.3);
+    border-radius: 10px;
+  }
+</style>
+
+<body>
+  <div class="container mb-4">
+    <h1>Contact Us</h1>
+
+    <div class="image">
+      <img src="../../static/images/cover11.jpg" alt="Image">
+    </div>
+    <div class="content">
+      <p class=" text-dark">We are thrilled to introduce you to Emporium Mall, designed to provide you with exciting opportunities to earn
+        money through Investment. Whether you're looking for a side hustle, a way to supplement your income, or a
+        full-time online earning solution, we've got you covered.</p>
+    </div>
+
+    <div class="image">
+      <img src="{% static './images/cover33.jpg' %}" alt="Image">
+    </div>
+
+    <div class="content">
+      <p class=" text-dark">We are excited to have you join our platform and embark on this earning adventure with us. Visit our website
+        today, sign up for an account, and unlock a world of earning possibilities right at your fingertips.
+        <br>
+        Happy earning!
+      </p>
+    </div>
+    <div class="image">
+      <img src="../../static/images/cover3.jpg" alt="Image">
+    </div>
+    <div class="content">
+      <p class=" text-dark">Join a Emporium Mall community of like-minded individuals who are also on their journey to earn money online.
+        Connect, share experiences, and seek guidance from fellow users through our interactive forums and chat
+        features. Our dedicated support team is also available to address any queries or concerns you may have.</p>
+    </div>
+  </div>
+</body>
+{% endblock %}

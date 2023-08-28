@@ -1,0 +1,238 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Recharge{% endblock %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static './css/account-detail.css' %}">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+    <style>
+    </style>
+</head>
+<style>
+        * {
+        color: #fff;
+         
+    }
+    .bank-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: chocolate;
+        padding: 10px;
+        /* border-radius: 8px; */
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.3);
+        margin-top: 10px;
+    }
+
+    .amount-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: chocolate;
+        padding: 25px 10px;
+        /* border-radius: 8px; */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        margin-top: 10px;
+    }
+
+    * {
+        color: #fff;
+    }
+
+    .bank-name {
+        font-size: 18px;
+        font-weight: bold;
+        color:#fff;
+    }
+
+    .amount-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    @media screen and (max-width: 576px) {
+        .bank-name {
+            font-size: 16px;
+        }
+    }
+
+    .upload-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 18px;
+        background-color: chocolate;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    .container {
+        max-width: 1200px;
+        height: 100%;
+        /* margin: 0 auto; */
+        /* padding: 20px; */
+    }
+    body {
+        background: linear-gradient(90deg, green, lightgreen);
+    }
+</style>
+
+<body>
+    <div class="col-12 mb-4">
+        <div class="d-flex justify-content-around p-2 mt-3">
+            <div class="step-heading p-3"  style="background-color: blue;">
+                Step 1: Deposit Amount into this Bank Detail. </div>
+        </div>
+
+
+        <div class="container mt-2">
+            <!-- <div class=" d-flex justify-content-center">
+                <img src="{% static 'images/hero77.png' %}" class="header-image" alt="Header Image">
+            </div>
+            <h5 class="package-price text-center">Deposit Amount: {{recharge_amount}} Rs</h5> -->
+
+            <div class="bank-details row p-1 mt-2 align-items-center">
+
+                <div class="bank-info">
+                    <span class="bank-name">Account Title:</span>
+                    <span class="bank-name">{{account_details.account_title}} <i
+                            class="fa-regular fa-copy ms-2"></i></span>
+                </div>
+                <div class="bank-info">
+                    <span class="bank-name">Account:</span>
+                    <span class="bank-name">{{account_details.bank_id.bank_name}}</span>
+                </div>
+                <div class="bank-info">
+                    <span class="bank-name">Account No:</span>
+                    <span class="bank-name referal_code"> 
+                        {% if account_details.bank_id.bank_name == 'JazaCash' or account_details.bank_id.bank_name == 'Easypasia' %}
+                         0{{account_details.account_number}}
+                        {% else %}
+                         {{account_details.account_number}}
+                       {% endif %}
+                    <i class="fa-regular fa-copy ms-2" onclick="copyToClipboard()" id="liveToastBtn"></i></span>
+                </div>
+
+
+
+                <!-- <div class="col-3 account-title font_sm" style="color:#f4ae3f;">Account Title: {{account_details.account_title}}
+                </div>
+                <div class="col-3 account-details font_sm" style="color:#f4ae3f;">Bank Name: {{account_details.bank_id.bank_name}}</div>
+                <div class="account-number col-6 row align-items-center">
+                    <div class=" col-7 mt-2 font_sm" style="float: left; color:#f4ae3f;">Account No:
+                    <span class="referal-code font_sm" id="referal_code">
+                        {% if account_details.bank_id.bank_name == 'JazaCash' or account_details.bank_id.bank_name == 'Easypasia' %}
+                        0{{account_details.account_number}}
+                        {% else %}
+                        {{account_details.account_number}}
+                        {% endif %}
+                    </span>
+                </div>
+
+                    <div class="col-4">
+                        <button type="button" class="btn btn-warning" onclick="copyToClipboard()" id="liveToastBtn">Copy</button>
+                    </div>
+                </div> -->
+            </div>
+            <div class="amount-info">
+                <span class="amount-name">Amount:</span>
+                <span class="amount-name">Pkr: {{recharge_amount}}</span>
+            </div>
+            <form method="POST" action="/recharge/" id="rechargeForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="step-heading mt-3 mb-2 p-3"
+                     style="background-color: blue;">Step 2: Upload Voucher
+                </div>
+
+                <div class="image-uploader">
+                    <div class="image-preview"></div>
+                    <input type="file" accept="image/*" onchange="previewImage(event)" required name="images" multiple>
+                    <input type="number" class="recharge-input" name="recharge_amount" required
+                        value="{{recharge_amount}}" hidden>
+                </div>
+
+                <input class="upload-button" type="submit" value="Confirm Payment" id="submitBtn">
+            </form>
+        </div>
+    </div>
+    <!-- Toast message  -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body  text-white">
+                Account Number copy.
+                <button type="button" class="btn-close" style="float: right;" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function copyAccountNumber2() {
+            var accountNumber = document.querySelector('.referal-code').textContent;
+            navigator.clipboard.writeText(accountNumber);
+        }
+
+        function previewImage(event) {
+            var preview = document.querySelector('.image-preview');
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.style.backgroundImage = "url(" + reader.result + ")";
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.backgroundImage = "";
+            }
+        }
+        const toastTrigger = document.getElementById('liveToastBtn')
+        const toastLiveExample = document.getElementById('liveToast')
+
+        if (toastTrigger) {
+            toastTrigger.addEventListener('click', () => {
+                const toast = new bootstrap.Toast(toastLiveExample)
+
+                toast.show()
+            })
+        }
+    </script>
+    <script>
+        function copyToClipboard() {
+            const div = document.getElementById("referal_code");
+
+            // Create a temporary textarea element
+            const textarea = document.createElement("textarea");
+
+            // Set the value of the textarea to the content of the div
+            textarea.value = div.innerText;
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            // Copy the selected text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+        }
+
+        document.getElementById('rechargeForm').addEventListener('submit', function (event) {
+            var submitButton = document.getElementById("submitBtn");
+            submitButton.disabled = true;
+            submitButton.value = "Submitting...";
+
+
+        });
+    </script>
+    </script>
+</body>
+{% endblock %}

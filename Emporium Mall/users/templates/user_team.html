@@ -1,0 +1,334 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Team{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static './css/team.css' %}">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+<style>
+        * {
+        color: #fff;
+    }
+    body {
+        background: linear-gradient(90deg, green, lightgreen);
+    }
+    .referal-code {
+        font-size: 15px;
+    }
+    .earning{
+        color: #fff;
+    }
+
+    .card {
+        background-color: chocolate;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #f2f2f2;
+    }
+
+    .icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        border-radius: 50%;
+    }
+
+    @media screen and (min-width: 768px) {
+        .row {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+    }
+
+    @media screen and (min-width: 992px) {
+        .row {
+            max-width: 970px;
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
+        .row {
+            max-width: 1170px;
+        }
+    }
+</style>
+
+<body>
+    <div class="row m-0 p-0 mt-4">
+        <div class="col-6">
+            <div class="card"
+                style="background: chocolate;">
+                <h5 style="color: #fff">
+                    {{team_size}}
+                </h5>
+                <h5 style="color: #fff">Team Size</h5>
+            </div>
+            <div class="card"
+                style="background: chocolate;">
+                <h5 style="color: #fff">
+                   Rs {{total_income}}/-
+                </h5>
+                <h5 style="color: #fff">Team Income</h5>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card"
+                style="background: chocolate;">
+                <i class="icon"></i>
+                <h5 style="color: #fff">
+                   Rs {{total_refer_deposit}}/-
+                </h5>
+                <h5 style="color: #fff">Team Recharge</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3 mb-5 col-12">
+        <div class="cards">
+            <div class="row">
+                     <div class="col-12 ">
+                        <div>
+<span style="display: flex;">
+    <p style="font-size: 12px; color: #fff; height: 30px; overflow: hidden;margin-right: 5px;" > 
+        <strong>Referral Code:</strong>
+         {{request.user.refer_code}}
+    </p>
+    <button type="button"onclick="copyToClipboard()" id="liveToastBtn" style="background: transparent;"><i  class="fa-regular fa-copy text-white" style="font-size: 20px;" ></i></button>
+
+</span>
+                            <p id="referal_code" hidden>https://{{domainname}}/Auth/signup/{{request.user.refer_code}}</p>
+                        </div>
+                        <div>
+
+                            <!-- <span><button type="button" class="btn btn-warning" onclick="copyToClipboard()" id="liveToastBtn">Copy</button></span> -->
+                            <!-- <span><i class="fa-regular fa-copy ms-2" onclick="copyToClipboard()" id="liveToastBtn"></i></span> -->
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="cards">
+            <div class="d-flex justify-content-between">
+                <div class="referal-code">
+                    <h3>Referral Income</h3>
+                </div>
+                <div class="">
+                    <span>Total Award: <span>Rs {{total_income}}/-</span></span>
+                </div>
+            </div>
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <h4>Level 1</h4>
+                        <span class="earning">Rs {{Level_1_income}}/-</span>
+                        <hr>
+                        <h5>Members</h5>
+                        <span>{{Level_1_count}}</span>
+                    </div>
+                    <div class="">
+                        <h4>Level 2</h4>
+                        <span class="earning">Rs {{Level_2_income}}/-</span>
+                        <hr>
+                        <h5>Members</h5>
+                        <span>{{Level_2_count}}</span>
+                    </div>
+                    <div class="">
+                        <h4>Level 3</h4>
+                        <span class="earning">Rs {{Level_3_income}}/-</span>
+                        <hr>
+                        <h5>Members</h5>
+                        <span>{{Level_3_count}}</span>
+                    </div>
+                </div>
+        </div> -->
+
+        <!-- <div class=""> -->
+        <div class="d-flex justify-content-between p-1 mb-1">
+            <div class=" tab active" onclick="showTab('Level 1')">Level 1</div>
+            <div class=" tab" onclick="showTab('Level 2')">Level 2</div>
+            <div class=" tab" onclick="showTab('Level 3')">Level 3</div>
+        </div>
+        <div class="content">
+            <div id="Level 1" class="tab-content">
+                <div class="cards">
+                    <div class="cards-heading d-flex justify-content-between">
+                        <span>Level 1</span>
+                        <div class="">
+                            <span><span>Rs {{Level_1_income}}/-</span></span>
+                        </div>
+                    </div>
+                    <ul class="history-list">
+                        {% for i in Level_1 %}
+                        <li>
+                            {% if Level_1_name %}
+                            {% for n in Level_1_name %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            <span class="code text-dark">user {{n}}</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if Level_1_income_per_refer %}
+                            {% for j in Level_1_income_per_refer %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            <span class="earning">Rs {{j}}/-</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <span class="earning">Rs 0/-</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div id="Level 2" class="tab-content" style="display: none;">
+                <div class="cards">
+                    <div class="cards-heading d-flex justify-content-between">
+                        <span>Level 2</span>
+                        <div class="">
+                            <span><span>Rs {{Level_2_income}}/-</span></span>
+                        </div>
+                    </div>
+                    <ul class="history-list">
+                        {% for i in Level_2 %}
+                        <li>
+                            {% if Level_2_name %}
+                            {% for n in Level_2_name %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            <span class="code text-dark">user {{n}}</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            {% if Level_2_income_per_refer %}
+                            {% for j in Level_2_income_per_refer %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            <span class="earning">Rs {{j}}/-</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <span class="earning">Rs 0/-</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div id="Level 3" class="tab-content" style="display: none;">
+                <div class="cards">
+                    <div class="cards-heading d-flex justify-content-between">
+                        <span>Level 3</span>
+                        <div class="">
+                            <span><span>Rs {{Level_3_income}}/-</span></span>
+                        </div>
+                    </div>
+                    <ul class="history-list">
+                        {% for i in Level_3 %}
+                        <li>
+                            {% if Level_3_name %}
+                            {% for n in Level_3_name %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            <span class="code text-dark">user {{n}}</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            {% if Level_3_income_per_refer %}
+                            {% for j in Level_3_income_per_refer %}
+                            {% if forloop.parentloop.counter == forloop.counter %}
+                            <span class="earning">Rs {{j}}/-</span>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <span class="earning">Rs 0/-</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+    <!-- Toast message  -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body  text-white">
+                Reference code copy.
+                <button type="button" class="btn-close" style="float: right;" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function copyAccountNumber() {
+            var accountNumber = document.querySelector('.referal-code').textContent;
+            navigator.clipboard.writeText(accountNumber);
+        }
+        function showTab(tabName) {
+            // Hide all tab contents
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            // Deactivate all tabs
+            var tabs = document.getElementsByClassName("tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            // Show selected tab content
+            document.getElementById(tabName).style.display = "block";
+            // Activate selected tab
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+    <script>
+        const toastTrigger = document.getElementById('liveToastBtn')
+        const toastLiveExample = document.getElementById('liveToast')
+
+        if (toastTrigger) {
+            toastTrigger.addEventListener('click', () => {
+                const toast = new bootstrap.Toast(toastLiveExample)
+
+                toast.show()
+            })
+        }
+    </script>
+
+    <script>
+        function copyToClipboard() {
+            const div = document.getElementById("referal_code");
+
+            // Create a temporary textarea element
+            const textarea = document.createElement("textarea");
+
+            // Set the value of the textarea to the content of the div
+            textarea.value = div.innerText;
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            // Copy the selected text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+{% endblock %}

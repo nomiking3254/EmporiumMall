@@ -1,0 +1,188 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} My Bills{% endblock %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static './css/history.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1  class="title-font" style="color: #fff;">Account History</h1>
+        </div>
+        <div class="icon">
+            <a style="color: #fff;" href="/" class="back-arrow title-font">
+                &#8592;
+            </a>
+        </div>
+        <div class="tabs row">
+            <div class="tab active col-4" onclick="showTab('income')">Income</div>
+            <div class="tab col-4" onclick="showTab('recharge')">Recharge</div>
+            <div class="tab col-4" onclick="showTab('withdraw')">Withdraw</div>
+        </div>
+        <div class="content">
+            <div id="income" class="tab-content">
+                {% for i in income_history %}
+                <div class="card bg-white">
+                    <div class="card-heading">{{i.income_resource}}</div>
+                    <div class="card-details">
+                        <div class="card-date"><span>{{i.income_at}}</span></div>
+                        <div class="card-amount">Rs {{i.amount}}</div>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+
+            </div>
+
+            <div id="recharge" class="tab-content" style="display: none;">
+                {% for i in deposit_history %}
+                <div class="card bg-white">
+                    {% if i.status == 'Deposit Success' %}
+                    <div class="card-heading">Amount Recharge <span class="badge badge-success">Success</span>
+                    </div>
+                    {% elif i.status == 'Deposit Failed' %}
+                    <div class="card-heading">Amount Recharge <span class="badge badge-danger">Rejected</span></div>
+                    {% else %}
+                    <div class="card-heading">Amount Recharge <span class="badge badge-warning">Pending</span></div>
+                    {% endif %}
+                    <div class="card-details">
+                        <div class="card-date"><span>{{i.deposit_request_at}}</span></div>
+                        <div class="card-amount">Rs {{i.amount}}</div>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+
+            <div id="withdraw" class="tab-content" style="display: none;">
+                {% for i in withdraw_history %}
+                <div class="card bg-white">
+                    {% if i.status == 'Withdraw Success' %}
+                    <div class="card-heading">Amount Withdraw <span class="badge badge-success">Success</span>
+                    </div>
+                    {% elif i.status == 'Withdraw Failed' %}
+                    <div class="card-heading">Amount Withdraw <span class="badge badge-danger">Rejected</span></div>
+                    {% else %}
+                    <div class="card-heading">Amount Withdraw <span class="badge badge-warning">Pending</span></div>
+                    {% endif %}
+                    <div class="">
+                        <div class="card-date"><span>{{i.withdraw_request_at}}</span></div>
+
+                        <div class="card-amount" style="float: right;">
+                            <span style="color: #fff">Amount request </span>Rs {{i.withdraw_amount}}
+                            <br><span style="color: #fff;">Amount Receive </span>Rs {{i.amount_received}}
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Handle pagination link clicks
+
+            $(document).on('click', '#pagination-income a', function (event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#income').html();
+                        var newPagination = result.find('#pagination-income').html();
+
+                        // Update the content and pagination
+                        $('#income').html(newContent);
+                        $('#pagination-income').html(newPagination);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+
+            $(document).on('click', '#pagination-recharge a', function (event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#recharge').html();
+                        var newPagination = result.find('#pagination-recharge').html();
+
+                        // Update the content and pagination
+                        $('#recharge').html(newContent);
+                        $('#pagination-recharge').html(newPagination);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+
+            $(document).on('click', '#pagination-withdraw a', function (event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#withdraw').html();
+                        var newPagination = result.find('#pagination-withdraw').html();
+
+                        // Update the content and pagination
+                        $('#withdraw').html(newContent);
+                        $('#pagination-withdraw').html(newPagination);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            // Deactivate all tabs
+            var tabs = document.getElementsByClassName("tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            // Show selected tab content
+            document.getElementById(tabName).style.display = "block";
+            // Activate selected tab
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+{% endblock %}

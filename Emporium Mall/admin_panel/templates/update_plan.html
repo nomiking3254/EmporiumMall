@@ -1,0 +1,411 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} add plan{% endblock %}
+
+{% block content %}
+<div class="nav-left-sidebar sidebar-dark d-none d-lg-block">
+    <div class="menu-list mb-5" style="max-height: 150vh;overflow-y: auto;min-width: 350px;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+
+                    <li class="nav-divider">
+                        {% if Company_profile %}
+                        <img src="/media/{{Company_profile.company_logo}}" class="mb-3 mt-4 ml-4"
+                        style="width: 150px;height:150px;border-radius: 50%;" />
+                    {% else %}
+                        <img src="{% static 'deault_profile_image.png'%}" class="mb-3 mt-4 ml-4 rounded-circle"
+                            style="width: auto;height:15vh;" />
+                    {% endif %}
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/">
+                            <i class="fa fa-fw fa-user-circle"></i>
+                            <span class="ml-2">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/all_users/">
+                            <i class="fa-regular fa-users"></i>
+                            <span class="ml-3">View All User</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-1" aria-controls="submenu-2">
+                            <i class="fa-regular fa-hand-holding-dollar"></i>
+                            <span class="ml-3">Manage Plans</span>
+                        </a>
+                        <div id="submenu-1" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link " href="/admin_dashboard/all_plans/">View all plans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="/admin_dashboard/add_plan/">Add new plans</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-2" aria-controls="submenu-2">
+                            <i class="fa-solid fa-landmark"></i>
+                            <span class="ml-3">Manage Bank Accounts</span>
+                        </a>
+                        <div id="submenu-2" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_account/">View all account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_account/">Add new account</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/depost/">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span class="ml-3">View Deposit Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/withdraw/">
+                            <i class="fa-solid fa-wallet"></i>
+                            <span class="ml-3">View Withdraw Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/socail_contact/">
+                            <i class="fa-regular fa-phone-volume"></i>
+                            <span class="ml-3">Manage Contact Information</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/profile/">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Auth/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<nav class="navbar navbar-dark bg-dark d-block d-sm-block d-lg-none d-xl-none mt-1">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/" aria-current="page">
+                        <i class="fa fa-fw fa-user-circle"></i>
+                        <span class="ml-2">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/all_users/">
+                        <i class="fa-regular fa-users"></i>
+                        <span class="ml-2">View All User</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-regular fa-hand-holding-dollar"></i>
+                        <span class="ml-3">Manage Plans</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_plans/">View all plans</a>
+                            <a class="dropdown-item active" href="/admin_dashboard/add_plan/">Add new plans</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-landmark"></i>
+                        <span class="ml-3">Bank Accounts</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_account/">View all account</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_account/">Add new account</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/depost/">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="ml-3">Deposit Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/withdraw/">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span class="ml-3">Withdraw Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/socail_contact/">
+                        <i class="fa-regular fa-phone-volume"></i>
+                        <span class="ml-3">Manage Contact Information</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/profile/">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span class="ml-3">User Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/company_profile/">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                        <span class="ml-3">Company Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Auth/logout/">
+                        <i class="fas fa-power-off"></i>
+                        <span class="ml-3">Logout</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                        <span> >> Update Plan</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ecommerce-widget">
+                <div class="row mt-2">
+                    <div class="col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h3 class="text-center">Update Plan</h3>
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/update_plan/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="planForm">
+                                        {% csrf_token %}
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Name</label>
+                                            <input type="text" class="form-control" name="plan_name" value="{{update_plan.name}}"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan category</label>
+                                            <select class=" form-control" name="Category"  id="Category" required>
+                                                <option value="">Select Plan Category</option>
+                                                {% if update_plan.plan_category == 'Simple Plan' %}
+                                                <option value="Simple Plan" selected>Simple Plan</option>
+                                                <option value="VIP Plan">VIP Plan</option>
+                                                {% else %}
+                                                <option value="Simple Plan">Simple Plan</option>
+                                                <option value="VIP Plan" selected>VIP Plan</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Plan image (select only if want to update image)</label>
+                                            <input type="file" class="form-control" name="plan_img" accept="image/*">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Price</label>
+                                            <input class="no-arrow form-control" maxlength="10" name="plan_price"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="plan_price"  value="{{update_plan.price}}"/>
+                                            <span id="error_plan_price" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div> 
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Total income</label>
+                                            <input class="no-arrow form-control"  name="total_income"
+                                            type="number" required id="total_income" value="{{update_plan.total_income}}" />
+                                            <span id="error_total_income" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Duration(in days) </label>
+                                            <input class="no-arrow form-control" maxlength="5" name="duration"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="duration" value="{{update_plan.plan_duration}}" />
+                                            <span id="error_duration" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Maximiun Buy Limit</label>
+                                            <input class="no-arrow form-control" maxlength="5" name="quantity"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="quantity" value="{{update_plan.quantity_limit}}"/>
+                                            <span id="error_quantity" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">
+                                                <b>Lanuch Now</b>
+                                            </label>
+                                            {% if update_plan.is_launch %}
+                                            <div class="form-check ml-3" >
+                                                <input class="form-check-input" checked type="radio"
+                                                    name="lanuch" required value="True"> Yes
+                                                
+                                            </div>
+                                            <div class="form-check ml-3" >
+                                                <input class="form-check-input" type="radio"
+                                                    name="lanuch" required value="False"> No
+                                                
+                                            </div>
+                                            {% else %}
+                                            <div class="form-check ml-3" >
+                                                <input class="form-check-input"  type="radio"
+                                                    name="lanuch" required value="True"> Yes
+                                                
+                                            </div>
+                                            <div class="form-check ml-3" >
+                                                <input class="form-check-input" checked type="radio"
+                                                    name="lanuch" required value="False"> No
+                                                
+                                            </div>
+                                            {% endif %}
+                                            <input value="update-plan" name="action" hidden />
+                                            <input value="{{update_plan.id}}" name="id" hidden />
+                                        </div>
+
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Update Plan
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var error_plan_price = document.getElementById('error_plan_price');
+    var error_total_income = document.getElementById('error_total_income')
+    var error_duration = document.getElementById('error_duration')
+    var error_quantity = document.getElementById('error_quantity')
+
+    var priceField = document.getElementById('plan_price');
+    var total_incomeField = document.getElementById('total_income')
+    var durationField = document.getElementById('duration')
+    var quantityField = document.getElementById('quantity')
+
+    priceField.onclick = function() {
+        error_plan_price.style.display = 'none'
+    };
+    total_incomeField.onclick = function() {
+        error_total_income.style.display = 'none'
+    };
+    durationField.onclick = function() {
+        error_duration.style.display = 'none'
+    };
+    quantityField.onclick = function() {
+        error_quantity.style.display = 'none'
+    };
+    
+    document.getElementById('planForm').addEventListener('submit', function(event) {
+    var priceValue = priceField.value.trim();
+    var total_incomeValue = total_incomeField.value.trim();
+    var durationValue = durationField.value.trim();
+    var quantityValue = quantityField.value.trim();
+
+
+    if (priceValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_plan_price.style.display = 'block';
+        error_plan_price.textContent = "Minimium plan price is 1 Rs atleast" ;
+    }
+    if (total_incomeValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_total_income.style.display = 'block';
+        error_total_income.textContent = "Minimium plan income is 1 Rs atleast" ;
+    }
+    if (durationValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_duration.style.display = 'block';
+        error_duration.textContent = "Minimium plan duration is atleast 1 day" ;
+    }
+    if (quantityValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_quantity.style.display = 'block';
+        error_quantity.textContent = "Minimium plan Buy Limit is atleast 1" ;
+    }
+    });
+</script>
+{% endblock %}

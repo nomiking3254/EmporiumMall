@@ -1,0 +1,432 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Contact Information{% endblock %}
+
+{% block content %}
+
+<div class="nav-left-sidebar sidebar-dark d-none d-lg-block">
+    <div class="menu-list mb-5" style="max-height: 150vh;overflow-y: auto; min-width: 350px;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+
+                    <li class="nav-divider">
+                        {% if Company_profile %}
+                        <img src="/media/{{Company_profile.company_logo}}" class="mb-3 mt-4 ml-4"
+                            style="width: 150px;height:150px;border-radius: 50%;" />
+                        {% else %}
+                        <img src="{% static 'deault_profile_image.png'%}" class="mb-3 mt-4 ml-4 rounded-circle"
+                            style="width: auto;height:15vh;" />
+                        {% endif %}
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/">
+                            <i class="fa fa-fw fa-user-circle"></i>
+                            <span class="ml-2">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/all_users/">
+                            <i class="fa-regular fa-users"></i>
+                            <span class="ml-3">View All User</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-1" aria-controls="submenu-2">
+                            <i class="fa-regular fa-hand-holding-dollar"></i>
+                            <span class="ml-3">Manage Plans</span>
+                        </a>
+                        <div id="submenu-1" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_plans/">View all plans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_plan/">Add new plans</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-2" aria-controls="submenu-2">
+                            <i class="fa-solid fa-landmark"></i>
+                            <span class="ml-3">Manage Bank Accounts</span>
+                        </a>
+                        <div id="submenu-2" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_account/">View all account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_account/">Add new account</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/depost/">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span class="ml-3">View Deposit Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/withdraw/">
+                            <i class="fa-solid fa-wallet"></i>
+                            <span class="ml-3">View Withdraw Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin_dashboard/socail_contact/">
+                            <i class="fa-regular fa-phone-volume"></i>
+                            <span class="ml-3">Manage Contact Information</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin_dashboard/profile/">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/Auth/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<nav class="navbar navbar-dark bg-dark d-block d-sm-block d-lg-none d-xl-none mt-1">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/" aria-current="page">
+                        <i class="fa fa-fw fa-user-circle"></i>
+                        <span class="ml-2">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/all_users/">
+                        <i class="fa-regular fa-users"></i>
+                        <span class="ml-2">View All User</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-regular fa-hand-holding-dollar"></i>
+                        <span class="ml-3">Manage Plans</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_plans/">View all plans</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_plan/">Add new plans</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-landmark"></i>
+                        <span class="ml-3">Bank Accounts</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_account/">View all account</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_account/">Add new account</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/depost/">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="ml-3">Deposit Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/withdraw/">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span class="ml-3">Withdraw Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link active" href="/admin_dashboard/socail_contact/">
+                        <i class="fa-regular fa-phone-volume"></i>
+                        <span class="ml-3">Manage Contact Information</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/profile/">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span class="ml-3">User Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/company_profile/">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                        <span class="ml-3">Company Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Auth/logout/">
+                        <i class="fas fa-power-off"></i>
+                        <span class="ml-3">Logout</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                    <span> >> Contact Information</span>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="ecommerce-widget">
+                <div class="row mt-2">
+                    <div class="col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                {% if Whatsapp_link %}
+                                <h3 class="text-center">Update Company Details</h3>
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/socail_contact/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="contactForm_sm">
+                                        {% csrf_token %}
+                                        <input value="update" name="action" hidden>
+                                        <input value="{{Whatsapp_link.id}}" name="id" hidden>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Contact Phone Number</label>
+                                            <input class="no-arrow form-control" type="number" name="phone"
+                                                maxlength="10" minlength="10"
+                                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                placeholder="10-digit phone number" required id="phone_input_sm"
+                                                value="{{Whatsapp_link.phone_number}}">
+                                            <span id="error_phonelenght_sm"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Whatsapp Group Join Link</label>
+                                            <input type="text" class="form-control" name="join_link"
+                                                placeholder="Enter Whatsapp Invite link" id="linkInput"
+                                                onblur="validateLink()" value="{{Whatsapp_link.join_link}}">
+                                            <span id="error_link"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+
+                                        </div>
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Update Company Details
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <script>
+                                    var error_phonelenght_sm = document.getElementById('error_phonelenght_sm');
+                                    var phone_input_sm = document.getElementById('phone_input_sm');
+
+                                    var error_link = document.getElementById('error_link');
+                                    var linkInput = document.getElementById("linkInput");
+
+                                    phone_input_sm.onclick = function () {
+                                        error_phonelenght_sm.style.display = 'none'
+                                    };
+                                    linkInput.onclick = function () {
+                                        error_link.style.display = 'none'
+                                    };
+
+
+                                    function validateLink() {
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput.value)) {
+                                            error_link.style.display = 'block';
+                                            error_link.textContent = 'Please enter a valid Whatsapp invite link';
+                                            linkInput.value = "";
+                                        }
+                                    }
+                                    document.getElementById('contactForm_sm').addEventListener('submit', function (event) {
+                                        var minLength_phone_sm = parseInt(phone_input_sm.getAttribute('minlength'));
+                                        var phoneValue_sm = phone_input_sm.value.trim();
+
+
+                                        if (phoneValue_sm.length < minLength_phone_sm) {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght_sm.style.display = 'block';
+                                            error_phonelenght_sm.textContent = 'Please enter valid phone number. \n Phone number must be ' + minLength_phone_sm + ' digit long.';
+                                        }
+                                        else if (phoneValue_sm[0] === '0') {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght_sm.style.display = 'block';
+                                            error_phonelenght_sm.textContent = 'Phone number first number cannot be 0';
+                                        }
+
+                                    });
+
+
+                                </script>
+                                {% else %}
+                                <h3 class="text-center">Add Contact Details</h3>
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/socail_contact/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="contactForm">
+                                        {% csrf_token %}
+                                        <input value="add" name="action" hidden>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Contact Phone Number</label>
+                                            <input class="no-arrow form-control" type="number" name="phone"
+                                                maxlength="10" minlength="10"
+                                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                placeholder="10-digit phone number" required id="phone_input"
+                                                value="{{Whatsapp_link.phone_number}}">
+                                            <span id="error_phonelenght"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Whatsapp Group Join Link</label>
+                                            <input type="text" class="form-control" name="join_link" id="linkInput"
+                                                onblur="validateLink()" placeholder="Enter Whatsapp Invite link"
+                                                required>
+                                            <span id="error_link"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+                                        </div>
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Add Contact Details
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <script>
+
+                                    var error_phonelenght = document.getElementById('error_phonelenght');
+                                    var phone_input = document.getElementById('phone_input');
+
+                                    var error_link = document.getElementById('error_link');
+                                    var linkInput = document.getElementById("linkInput");
+
+
+                                    phone_input.onclick = function () {
+                                        error_phonelenght.style.display = 'none'
+                                    };
+
+                                    linkInput.onclick = function () {
+                                        error_link.style.display = 'none'
+                                    };
+
+
+                                    function validateLink() {
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput.value)) {
+                                            error_link.style.display = 'block';
+                                            error_link.textContent = 'Please enter a valid Whatsapp invite link';
+                                            linkInput.value = "";
+                                        }
+                                    }
+                                    document.getElementById('contactForm').addEventListener('submit', function (event) {
+                                        var minLength_phone = parseInt(phone_input.getAttribute('minlength'));
+                                        var phoneValue = phone_input.value.trim();
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput.value)) {
+                                            error_link.style.display = 'block';
+                                            error_link.textContent = 'Please enter a valid Whatsapp invite link';
+                                            linkInput.value = "";
+                                        }
+
+                                        if (phoneValue.length < minLength_phone) {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght.style.display = 'block';
+                                            error_phonelenght.textContent = 'Please enter valid phone number. \n Phone number must be ' + minLength_phone + ' digit long.';
+                                        }
+                                        else if (phoneValue[0] === '0') {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght.style.display = 'block';
+                                            error_phonelenght.textContent = 'Phone number first number cannot be 0';
+                                        }
+
+                                    });
+
+                                </script>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
